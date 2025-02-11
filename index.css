@@ -999,6 +999,10 @@ footer {
         height: 300px;
     }
 
+    .name .resume a::before{
+        border-radius: 5px;
+    }
+
     .education .eduintern{
         flex-direction: column;
     }
