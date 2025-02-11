@@ -159,3 +159,33 @@ document.getElementById("sendMessage").addEventListener("click", function() {
     document.getElementById("message").value = "";
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    emailjs.init("Pi3VJvi88RsQbDyEe");  // Initialize EmailJS
+
+    let form = document.getElementById("contact-form");
+
+    if (!form) {  // ✅ Debugging: Check if form exists
+        console.error("❌ Form with ID 'contact-form' not found! Check your HTML.");
+        return;  // Stop script execution
+    }
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();  // ✅ Stop form from submitting normally
+
+        emailjs.send("service_7bymw59", "template_2roukqt", {
+            from_name: document.getElementById("name").value,
+            from_email: document.getElementById("email").value,
+            from_phone: document.getElementById("phone").value,
+            from_emailsub: document.getElementById("emailsub").value,
+            message: document.getElementById("message").value,
+            to_email: "tassutas9@gmail.com"  // Replace with your email
+        }).then(function (response) {
+            alert("✅ Message sent successfully!");
+            form.reset();  // ✅ Clear form after sending
+        }, function (error) {
+            alert("❌ Failed to send message. Check the console for errors.");
+            console.error("EmailJS Error:", error);
+        });
+    });
+});
+

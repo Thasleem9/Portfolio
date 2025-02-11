@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="index.css">
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    
 </head>
 
 <body>
@@ -444,19 +446,19 @@
             </div>
 
             <div class="contact-grid">
-                <form action="https://formsubmit.co/tassutas9@gmail.com" method="POST">
+                <form id="contact-form">
                     <div class="grid1">
-                        <input type="text" name="name" placeholder="Full Name" required>
-                        <input type="email" name="email" placeholder="Email Address" required>
+                        <input type="text" name="name" placeholder="Full Name" id="name" required>
+                        <input type="email" name="email" placeholder="Email Address" id="email" required>
                     </div>
             
                     <div class="grid2">
-                        <input type="tel" name="phone" placeholder="Phone Number" required>
-                        <input type="text" name="subject" placeholder="Email Subject" required>
+                        <input type="tel" name="phone" placeholder="Phone Number" id="phone" required>
+                        <input type="text" name="subject" placeholder="Email Subject" id="emailsub" required>
                     </div>
             
                     <div class="grid3">
-                        <textarea name="message" placeholder="Your message" required></textarea>
+                        <textarea name="message" placeholder="Your message" id="message" required></textarea>
                     </div>
             
                     <!-- Hidden input for better email formatting -->
@@ -506,6 +508,38 @@
     
 
 
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        emailjs.init("Pi3VJvi88RsQbDyEe");  // ✅ Initialize EmailJS only after DOM loads
+
+        let form = document.getElementById("contact-form");
+
+        if (!form) {  
+            console.error("❌ Form with ID 'contact-form' not found! Check your HTML.");
+            return;  // Stop script execution
+        }
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();  // ✅ Stop form from submitting normally
+
+            emailjs.send("service_7bymw59", "template_2roukqt", {
+                from_name: document.getElementById("name").value,
+                from_email: document.getElementById("email").value,
+                from_phone: document.getElementById("phone").value,
+                from_emailsub: document.getElementById("emailsub").value,
+                message: document.getElementById("message").value
+            }).then(function (response) {
+                alert("✅ Message sent successfully!");
+                form.reset();  // ✅ Clear form after sending
+            }, function (error) {
+                alert("❌ Failed to send message. Check the console for errors.");
+                console.error("EmailJS Error:", error);
+            });
+        });
+    });
+</script>
 
     <script src="script.js">
     </script>
