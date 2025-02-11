@@ -466,6 +466,7 @@
             
                     <center>
                         <button type="submit">Send Message</button>
+                        <p id="status"></p>
                     </center>
                 </form>
             </div>
@@ -512,34 +513,60 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        emailjs.init("Pi3VJvi88RsQbDyEe");  // ✅ Initialize EmailJS only after DOM loads
-
+        emailjs.init("Pi3VJvi88RsQbDyEe");  // ✅ Initialize EmailJS immediately
+    
         let form = document.getElementById("contact-form");
-
-        if (!form) {  
-            console.error("❌ Form with ID 'contact-form' not found! Check your HTML.");
-            return;  // Stop script execution
-        }
-
-        form.addEventListener("submit", function (event) {
-            event.preventDefault();  // ✅ Stop form from submitting normally
-
-            emailjs.send("service_7bymw59", "template_2roukqt", {
-                from_name: document.getElementById("name").value,
-                from_email: document.getElementById("email").value,
-                from_phone: document.getElementById("phone").value,
-                from_emailsub: document.getElementById("emailsub").value,
-                message: document.getElementById("message").value
-            }).then(function (response) {
-                alert("✅ Message sent successfully!");
-                form.reset();  // ✅ Clear form after sending
-            }, function (error) {
-                alert("❌ Failed to send message. Check the console for errors.");
-                console.error("EmailJS Error:", error);
-            });
+        let button = form.querySelector("button");
+        let statusMessage = document.getElementById("status");
+    
+        form.addEventListener("submit", async function (event) {
+            event.preventDefault();  // ✅ Prevent default form submission
+    
+            // ✅ Disable button & show sending status immediately
+            button.disabled = true;
+            button.textContent = "Sending...";
+            statusMessage.textContent = "Processing...";
+            statusMessage.style.color = "blue";
+    
+            try {
+                await emailjs.send("service_7bymw59", "template_2roukqt", {
+                    from_name: document.getElementById("name").value,
+                    from_email: document.getElementById("email").value,
+                    from_phone: document.getElementById("phone").value,
+                    from_emailsub: document.getElementById("emailsub").value,
+                    message: document.getElementById("message").value
+                });
+    
+                statusMessage.textContent = "✅ Message sent successfully!";
+                statusMessage.style.color = "green";
+    
+                form.reset();  // ✅ Clear form immediately
+    
+                // ✅ Hide the status message after 10 seconds
+                setTimeout(() => {
+                    statusMessage.textContent = "";  // Clear message
+                }, 10000);
+    
+            } catch (error) {
+                console.error("❌ EmailJS Error:", error);
+                statusMessage.textContent = "❌ Failed to send message!";
+                statusMessage.style.color = "red";
+    
+                // Hide error message after 10 seconds
+                setTimeout(() => {
+                    statusMessage.textContent = "";  
+                }, 10000);
+            }
+    
+            // ✅ Re-enable button immediately after sending
+            button.disabled = false;
+            button.textContent = "Send Message";
         });
     });
+    
 </script>
+
+
 
     <script src="script.js">
     </script>
